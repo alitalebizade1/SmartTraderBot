@@ -213,14 +213,20 @@ def _validate(pivot: _RawPivot, cfg: SwingConfig) -> bool:
 
 def _to_swing(pivot: _RawPivot, df: pd.DataFrame, cfg: SwingConfig) -> Swing:
     left_s, right_s, strength_enum = _score_strength(pivot, cfg)
-    time = (
-        df.index[pivot.index]
-        if hasattr(df.index, "dtype") and pd.api.types.is_datetime64_any_dtype(df.index)
-        else (df["time"].iloc[pivot.index] if "time" in df.columns else pd.Timestamp("1970-01-01"))
+    candle_time = (
+        df["time"].iloc[pivot.index]
+        if "time" in df.columns
+        else (df.index[pivot.index] if hasattr(df.index, "dtype") and pd.api.types.is_datetime64_any_dtype(df.index) else pd.Timestamp("1970-01-01"))
     )
     return Swing(
-        index=pivot.index, price=pivot.price, time=time, swing_type=pivot.pivot_type,
-        strength=strength_enum.value, atr=pivot.atr, left_strength=left_s, right_strength=right_s,
+        index=pivot.index,
+        price=pivot.price,
+        time=candle_time,
+        swing_type=pivot.pivot_type,
+        strength=strength_enum.value,
+        atr=pivot.atr,
+        left_strength=left_s,
+        right_strength=right_s,
         valid=_validate(pivot, cfg),
     )
 
