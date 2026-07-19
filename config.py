@@ -26,3 +26,4 @@ REWARD_RATIO: float = 2.0
 # Chart output
 CHART_OUTPUT_HTML: str = "chart_output.html"
 CHART_THEME: str = "plotly_dark"
+DEBUG_VISUALIZATION: bool = True
